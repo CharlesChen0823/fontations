@@ -191,13 +191,13 @@ impl HintInstance {
             Definition::default(),
         );
         self.cvt.clear();
-        let cvt = outlines.common.cvt();
+        // let cvt = outlines.common.cvt();
         if let Ok(cvar) = outlines.common.font.cvar() {
             // First accumulate all the deltas in 16.16
-            self.cvt.resize(cvt.len(), 0);
+            self.cvt.resize(outlines.common.cvt().len(), 0);
             let _ = cvar.deltas(axis_count, coords, &mut self.cvt);
             // Now add the base CVT values
-            for (value, base_value) in self.cvt.iter_mut().zip(cvt.iter()) {
+            for (value, base_value) in self.cvt.iter_mut().zip(outlines.common.cvt().iter()) {
                 // Deltas are converted from 16.16 to 26.6
                 // See <https://gitlab.freedesktop.org/freetype/freetype/-/blob/57617782464411201ce7bbc93b086c1b4d7d84a5/src/truetype/ttgxvar.c#L3822>
                 let delta = Fixed::from_bits(*value).to_f26dot6().to_bits();
@@ -208,7 +208,7 @@ impl HintInstance {
             // CVT values are converted to 26.6 on load
             // See <https://gitlab.freedesktop.org/freetype/freetype/-/blob/57617782464411201ce7bbc93b086c1b4d7d84a5/src/truetype/ttpload.c#L350>
             self.cvt
-                .extend(cvt.iter().map(|value| (value.get() as i32) * 64));
+                .extend(outlines.common.cvt().iter().map(|value| (value.get() as i32) * 64));
         }
         // More weird scaling. This is due to the fact that CVT values are
         // already in 26.6
