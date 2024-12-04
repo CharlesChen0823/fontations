@@ -253,11 +253,7 @@ impl<'a> Outlines<'a> {
             // Last chance, use the private dict range from the top dict if
             // available.
             let range = self.top_dict.private_dict_range.clone();
-            if !range.is_empty() {
-                Some(range.start as usize..range.end as usize)
-            } else {
-                None
-            }
+            Some(range.start as usize..range.end as usize)
         }
         .ok_or(Error::MissingPrivateDict)
     }
