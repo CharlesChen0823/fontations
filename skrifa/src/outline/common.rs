@@ -37,7 +37,7 @@ impl<'a> OutlinesCommon<'a> {
         if let Some(hvar) = &self.hvar {
             advance += hvar
                 .advance_width_delta(gid, coords)
-                .map(|delta| delta.to_i32())
+                .map(|delta| delta.to_f64() as i32)
                 .unwrap_or(0);
         }
         advance
@@ -51,7 +51,7 @@ impl<'a> OutlinesCommon<'a> {
         if let Some(hvar) = &self.hvar {
             lsb += hvar
                 .lsb_delta(gid, coords)
-                .map(|delta| delta.to_i32())
+                .map(|delta| delta.to_f64() as i32)
                 .unwrap_or(0);
         }
         lsb
